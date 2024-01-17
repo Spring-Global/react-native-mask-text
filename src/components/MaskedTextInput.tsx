@@ -3,6 +3,8 @@ import React, {
   useState,
   forwardRef,
   ForwardRefRenderFunction,
+  useRef,
+  useImperativeHandle,
 } from 'react'
 import { TextInput, TextInputProps } from 'react-native'
 import { mask, unMask } from '../utils/mask'
@@ -48,6 +50,13 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
   },
   ref
 ): JSX.Element => {
+  const innerRef = useRef<React.ComponentRef<typeof TextInput>>(null)
+
+  useImperativeHandle(
+    ref,
+    () => innerRef.current as React.ComponentRef<typeof TextInput>
+  )
+
   const styleSheet = [
     {
       fontWeight: textBold && 'bold',
@@ -82,6 +91,7 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
   const actualValue = pattern || type === 'currency' ? maskedValue : rawValue
 
   function onChange(value: string) {
+    console.log('value', value)
     const newUnMaskedValue = unMask(value, type as 'custom' | 'currency')
     const newMaskedValue = mask(newUnMaskedValue, pattern, type, options)
 
@@ -113,12 +123,23 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
     <>
       <TextInput
         onChangeText={(value) => onChange(value)}
-        ref={ref}
+        ref={innerRef}
         maxLength={pattern.length || undefined}
         autoCapitalize={autoCapitalize}
         {...rest}
         value={actualValue}
         style={styleSheet as StyleObj}
+        onSelectionChange={(e) => {
+          // the idea here is to avoid the cursor going to the suffix
+          if (options.suffix) {
+            const startIndexOf = maskedValue.indexOf(options.suffix)
+            if (e.nativeEvent.selection.start >= startIndexOf) {
+              innerRef.current?.setNativeProps({
+                selection: { start: startIndexOf, end: startIndexOf },
+              })
+            }
+          }
+        }}
       />
       {inputAccessoryView}
     </>
