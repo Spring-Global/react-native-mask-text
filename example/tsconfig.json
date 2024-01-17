@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "react-native-mask-text": [
+        "../src"
+      ]
+    }
   },
   "extends": "expo/tsconfig.base"
 }
