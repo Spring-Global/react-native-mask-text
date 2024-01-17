@@ -1,8 +1,9 @@
 /* eslint-disable no-confusing-arrow */
 import { BigNumber } from 'bignumber.js'
 import type { AutoCapitalizeOptions } from '../@types/AutoCapitalizeOptions'
-import type { FormatType } from '../@types/FormatType'
+import type { FormatType } from '../@types'
 import toPattern from './toPattern'
+import type { MaskOptions } from '../@types'
 
 /**
  * function unMask(
@@ -10,11 +11,23 @@ import toPattern from './toPattern'
  * @param {'custom' | 'currency'} type
  * @returns {string}
  */
-function unMask(value: string, type: 'custom' | 'currency' = 'custom') {
+function unMask(
+  value: string,
+  type: 'custom' | 'currency' = 'custom',
+  options?: MaskOptions
+): string {
   if (type === 'currency') {
     if (!value) return '0'
-
-    const unMaskedValue = value.replace(/\D/g, '')
+    let unMaskedValue = value
+    unMaskedValue =
+      options?.prefix != null
+        ? unMaskedValue.replace(options?.prefix, '')
+        : unMaskedValue
+    unMaskedValue =
+      options?.suffix != null
+        ? unMaskedValue.replace(options?.suffix, '')
+        : unMaskedValue
+    unMaskedValue = unMaskedValue.replace(/\D/g, '')
     const number = parseInt(unMaskedValue.trimStart())
 
     return isNaN(number) ? '0' : number.toString()
@@ -130,7 +143,7 @@ function mask(
   value: string | number,
   pattern: string | string[] = '',
   type: FormatType = 'custom',
-  options?: any,
+  options?: MaskOptions,
   autoCapitalize?: AutoCapitalizeOptions
 ): string {
   if (type === 'currency') {

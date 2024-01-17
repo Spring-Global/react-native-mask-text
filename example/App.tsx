@@ -29,7 +29,7 @@ export default function App() {
         type="currency"
         options={{
           prefix: '$',
-          suffix: ' test',
+          suffix: ' test with space',
           decimalSeparator: '.',
           groupSeparator: ',',
           precision: 2,

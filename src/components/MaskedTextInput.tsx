@@ -101,7 +101,11 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
   const actualValue = pattern || type === 'currency' ? maskedValue : rawValue
 
   function onChange(value: string) {
-    const newUnMaskedValue = unMask(value, type as 'custom' | 'currency')
+    const newUnMaskedValue = unMask(
+      value,
+      type as 'custom' | 'currency',
+      options
+    )
     const newMaskedValue = mask(newUnMaskedValue, pattern, type, options)
 
     setMaskedValue(newMaskedValue)
