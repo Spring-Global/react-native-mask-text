@@ -27,6 +27,7 @@ export interface MaskedTextInputProps extends TIProps {
   textItalic?: boolean
   textDecoration?: TextDecorationOptions
   style?: StyleObj
+  selectionType?: 'state' | 'setNativeProps'
 }
 
 export const MaskedTextInputComponent: ForwardRefRenderFunction<
@@ -46,6 +47,7 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
     textItalic,
     textDecoration,
     style,
+    selectionType = 'state',
     ...rest
   },
   ref
@@ -92,6 +94,9 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
   const [unMaskedValue, setUnmaskedValue] = useState(initialUnMaskedValue)
   const [rawValue, setRawValue] = useState(initialRawValue)
   const [isInitialRender, setIsInitialRender] = useState(true)
+  const [selection, setSelection] = useState<
+    { start: number; end: number } | undefined
+  >(undefined)
 
   const actualValue = pattern || type === 'currency' ? maskedValue : rawValue
 
@@ -139,6 +144,7 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
         {...rest}
         value={actualValue}
         style={styleSheet as StyleObj}
+        selection={selection}
         onSelectionChange={() => {
           // the idea here is to avoid the cursor going to the suffix
           if (options.suffix) {
@@ -147,9 +153,14 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
               refValues.current.maskedValue.length - options.suffix.length,
               0
             )
-            innerRef.current?.setNativeProps({
-              selection: { start: startIndexOf, end: startIndexOf },
-            })
+            const newSelection = { start: startIndexOf, end: startIndexOf }
+            if (selectionType == 'state') {
+              setSelection(newSelection)
+            } else {
+              innerRef.current?.setNativeProps({
+                selection: newSelection,
+              })
+            }
           }
         }}
       />
