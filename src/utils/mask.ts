@@ -17,7 +17,7 @@ function unMask(value: string, type: 'custom' | 'currency' = 'custom') {
     const unMaskedValue = value.replace(/\D/g, '')
     const number = parseInt(unMaskedValue.trimStart())
 
-    return number.toString()
+    return isNaN(number) ? '0' : number.toString()
   }
 
   return value.replace(/\W/g, '')
