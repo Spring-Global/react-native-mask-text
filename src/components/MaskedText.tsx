@@ -1,16 +1,16 @@
 import React from 'react'
 import { Text, TextProps } from 'react-native'
 import { mask } from '../utils/mask'
-import type { MaskOptions, StyleObj, TextDecorationOptions } from 'src/@types'
+import type { MaskOptions, StyleObj, TextDecorationOptions } from '../@types'
 export interface MaskedTextProps {
   children: string
   mask?: string
   type?: 'custom' | 'currency'
   options?: MaskOptions
   textBold?: boolean
-  textItalic?:boolean
-  textDecoration?:TextDecorationOptions
-  style?:StyleObj
+  textItalic?: boolean
+  textDecoration?: TextDecorationOptions
+  style?: StyleObj
 }
 
 export function MaskedText({
@@ -28,10 +28,14 @@ export function MaskedText({
     {
       fontWeight: textBold && 'bold',
       fontStyle: textItalic && 'italic',
-      textDecorationLine: textDecoration
+      textDecorationLine: textDecoration,
     },
-    style
+    style,
   ]
-  
-  return <Text {...rest} style={styleSheet as StyleObj}>{mask(text, pattern, type, options)}</Text>;
+
+  return (
+    <Text {...rest} style={styleSheet as StyleObj}>
+      {mask(text, pattern, type, options)}
+    </Text>
+  )
 }

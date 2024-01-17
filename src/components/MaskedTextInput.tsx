@@ -6,8 +6,12 @@ import React, {
 } from 'react'
 import { TextInput, TextInputProps } from 'react-native'
 import { mask, unMask } from '../utils/mask'
-import type { FormatType, MaskOptions, StyleObj, TextDecorationOptions } from 'src/@types'
-
+import type {
+  FormatType,
+  MaskOptions,
+  StyleObj,
+  TextDecorationOptions,
+} from '../@types'
 
 type TIProps = Omit<TextInputProps, 'onChangeText'>
 export interface MaskedTextInputProps extends TIProps {
@@ -18,8 +22,8 @@ export interface MaskedTextInputProps extends TIProps {
   onChangeText: (text: string, rawText: string) => void
   inputAccessoryView?: JSX.Element
   textBold?: boolean
-  textItalic?:boolean
-  textDecoration?:TextDecorationOptions
+  textItalic?: boolean
+  textDecoration?: TextDecorationOptions
   style?: StyleObj
 }
 
@@ -48,9 +52,9 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
     {
       fontWeight: textBold && 'bold',
       fontStyle: textItalic && 'italic',
-      textDecorationLine: textDecoration
+      textDecorationLine: textDecoration,
     },
-    style
+    style,
   ]
   const getMaskedValue = (value: string) =>
     mask(value, pattern, type, options, autoCapitalize)
@@ -60,7 +64,7 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
   const defaultValueCustom = defaultValue || ''
   const defaultValueCurrency = defaultValue || '0'
 
-  const initialRawValue = value;
+  const initialRawValue = value
 
   const initialMaskedValue = getMaskedValue(
     type === 'currency' ? defaultValueCurrency : defaultValueCustom
@@ -72,10 +76,10 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
 
   const [maskedValue, setMaskedValue] = useState(initialMaskedValue)
   const [unMaskedValue, setUnmaskedValue] = useState(initialUnMaskedValue)
-  const [rawValue, setRawValue] = useState(initialRawValue);
+  const [rawValue, setRawValue] = useState(initialRawValue)
   const [isInitialRender, setIsInitialRender] = useState(true)
 
-  const actualValue = pattern || type === "currency" ? maskedValue : rawValue;
+  const actualValue = pattern || type === 'currency' ? maskedValue : rawValue
 
   function onChange(value: string) {
     const newUnMaskedValue = unMask(value, type as 'custom' | 'currency')
@@ -83,7 +87,7 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
 
     setMaskedValue(newMaskedValue)
     setUnmaskedValue(newUnMaskedValue)
-    setRawValue(value);
+    setRawValue(value)
   }
 
   useEffect(() => {

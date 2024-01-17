@@ -1,6 +1,6 @@
 /* eslint-disable no-confusing-arrow */
 import { BigNumber } from 'bignumber.js'
-import type { AutoCapitalizeOptions } from 'src/@types/AutoCapitalizeOptions'
+import type { AutoCapitalizeOptions } from '../@types/AutoCapitalizeOptions'
 import type { FormatType } from '../@types/FormatType'
 import toPattern from './toPattern'
 
@@ -42,7 +42,7 @@ function masker(value: string, pattern: string, options: any) {
     case 'words':
       sentence.replace(/(?:^|\s)\S/g, (text) => text.toUpperCase())
       break
-    case 'sentences':{
+    case 'sentences': {
       const lower = sentence.toLowerCase()
       lower.charAt(0).toUpperCase() + lower.substring(1)
       break
