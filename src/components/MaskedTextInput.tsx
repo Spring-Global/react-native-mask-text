@@ -83,6 +83,11 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
     type === 'currency' ? defaultValueCurrency : defaultValueCustom
   )
 
+  const refValues = useRef({
+    maskedValue: initialMaskedValue,
+    unMaskedValue: initialUnMaskedValue,
+    rawValue: initialRawValue,
+  })
   const [maskedValue, setMaskedValue] = useState(initialMaskedValue)
   const [unMaskedValue, setUnmaskedValue] = useState(initialUnMaskedValue)
   const [rawValue, setRawValue] = useState(initialRawValue)
@@ -91,13 +96,18 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
   const actualValue = pattern || type === 'currency' ? maskedValue : rawValue
 
   function onChange(value: string) {
-    console.log('value', value)
     const newUnMaskedValue = unMask(value, type as 'custom' | 'currency')
     const newMaskedValue = mask(newUnMaskedValue, pattern, type, options)
 
     setMaskedValue(newMaskedValue)
     setUnmaskedValue(newUnMaskedValue)
     setRawValue(value)
+
+    refValues.current = {
+      maskedValue: newMaskedValue,
+      unMaskedValue: newUnMaskedValue,
+      rawValue: value,
+    }
   }
 
   useEffect(() => {
@@ -129,15 +139,17 @@ export const MaskedTextInputComponent: ForwardRefRenderFunction<
         {...rest}
         value={actualValue}
         style={styleSheet as StyleObj}
-        onSelectionChange={(e) => {
+        onSelectionChange={() => {
           // the idea here is to avoid the cursor going to the suffix
           if (options.suffix) {
-            const startIndexOf = maskedValue.indexOf(options.suffix)
-            if (e.nativeEvent.selection.start >= startIndexOf) {
-              innerRef.current?.setNativeProps({
-                selection: { start: startIndexOf, end: startIndexOf },
-              })
-            }
+            // always keep the cursor at the end of the input
+            const startIndexOf = Math.max(
+              refValues.current.maskedValue.length - options.suffix.length,
+              0
+            )
+            innerRef.current?.setNativeProps({
+              selection: { start: startIndexOf, end: startIndexOf },
+            })
           }
         }}
       />
