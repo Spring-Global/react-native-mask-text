@@ -1,5 +1,5 @@
 {
-  "name": "react-native-mask-text",
+  "name": "@spring-global/react-native-mask-text",
   "version": "0.0.0",
   "description": "A React Native and Expo library to mask text",
   "keywords": [
@@ -18,13 +18,13 @@
   "files": [
     "lib/"
   ],
-  "repository": "https://github.com/akinncar/react-native-mask-text",
+  "repository": "https://github.com/Spring-Global/react-native-mask-text",
   "author": "Akinn Rosa <akinncar@hotmail.com> (https://github.com/akinncar)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/akinncar/react-native-mask-text/issues"
+    "url": "https://github.com/Spring-Global/react-native-mask-text/issues"
   },
-  "homepage": "https://github.com/akinncar/react-native-mask-text#readme",
+  "homepage": "https://github.com/Spring-Global/react-native-mask-text#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
